@@ -1,0 +1,14 @@
+﻿  Site.cpp
+  GrapheSite.cpp
+d:\c++\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice2_hypergraph\exercice2_hypergraph\graphesite.h(3): warning C4067: jetons inattendus après la directive du préprocesseur - saut de ligne attendu
+d:\c++\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice2_hypergraph\exercice2_hypergraph\graphesite.cpp(3): warning C4067: jetons inattendus après la directive du préprocesseur - saut de ligne attendu
+d:\c++\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice2_hypergraph\exercice2_hypergraph\graphesite.cpp(4): warning C4067: jetons inattendus après la directive du préprocesseur - saut de ligne attendu
+d:\c++\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice2_hypergraph\exercice2_hypergraph\graphesite.cpp(12): warning C4018: '<' : incompatibilité signed/unsigned
+d:\c++\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice2_hypergraph\exercice2_hypergraph\graphesite.cpp(23): warning C4018: '<' : incompatibilité signed/unsigned
+d:\c++\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice2_hypergraph\exercice2_hypergraph\graphesite.cpp(74): warning C4018: '<' : incompatibilité signed/unsigned
+d:\c++\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice2_hypergraph\exercice2_hypergraph\graphesite.cpp(114): warning C4018: '<' : incompatibilité signed/unsigned
+  Exercice2_Hypergraph.cpp
+d:\c++\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice2_hypergraph\exercice2_hypergraph\graphesite.h(3): warning C4067: jetons inattendus après la directive du préprocesseur - saut de ligne attendu
+  Génération de code en cours...
+  Exercice2_Hypergraph.vcxproj -> D:\C++\Devoir2_FAKIHANI_GALA_LASCHKAR_PRYFER_RENDU_8INF840_E2018\Exercice2_Hypergraph\Debug\Exercice2_Hypergraph.exe
+  Exercice2_Hypergraph.vcxproj -> D:\C++\Devoir2_FAKIHANI_GALA_LASCHKAR_PRYFER_RENDU_8INF840_E2018\Exercice2_Hypergraph\Debug\Exercice2_Hypergraph.pdb (Partial PDB)
