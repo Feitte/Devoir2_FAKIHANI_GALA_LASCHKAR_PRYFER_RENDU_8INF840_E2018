@@ -9,7 +9,7 @@ bool Cell::visit(deque<Cell *> & path) {
 	visited = true; // mark as visited
 	cout << "visiting cell " << number << endl;
 	if (number == 1) {
-		cout << "puzzle solved\n";
+		cout << "Maze entirely explored\n";
 		return true;
 	}
 	// put neighbors into deque
@@ -21,9 +21,4 @@ bool Cell::visit(deque<Cell *> & path) {
 			//path.push_front(*start); // depth-first
 			path.push_back (*start); // breadth-first
 	return false;
-}
-
-string Cell::toString()
-{
-	return string();
 }

@@ -1,2 +1,5 @@
 ﻿  maze.cpp
+c:\users\benja\desktop\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice3_labyrinthes\exercice3_labyrinthes\maze.cpp(76): warning C4018: '<' : incompatibilité signed/unsigned
+c:\users\benja\desktop\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice3_labyrinthes\exercice3_labyrinthes\maze.cpp(78): warning C4018: '<=' : incompatibilité signed/unsigned
+c:\users\benja\desktop\devoir2_fakihani_gala_laschkar_pryfer_rendu_8inf840_e2018\exercice3_labyrinthes\exercice3_labyrinthes\maze.cpp(89): warning C4553: '==' : résultat de l'expression non utilisé ; souhaitiez-vous utiliser '=' ?
   Exercice3_Labyrinthes.vcxproj -> C:\Users\benja\Desktop\Devoir2_FAKIHANI_GALA_LASCHKAR_PRYFER_RENDU_8INF840_E2018\Exercice3_Labyrinthes\Debug\Exercice3_Labyrinthes.exe

@@ -1,61 +1,107 @@
 #include "stdafx.h"
 #include "maze.h"
 
-Maze::Maze(const char * nameOfFile, int starting_cell)
+Maze::Maze(const char * nameOfFile, int cell_start, int cell_stop)
 {
-	ifstream fichier("maze.txt", ios::in);  // on ouvre en lecture
-	if (fichier)  // si l'ouverture a fonctionné
+	
+	ifstream fichier(nameOfFile, ios::in);  // On ouvre en lecture
+	if (fichier)							// Si l'ouverture a fonctionne
 	{
 		string ligne;
-		fichier >> numCols >> numRows;
-		//cout << numCols << " " << numRows << " " << endl;
+		fichier >> numCols >> numRows;		// Lecture de la premiere ligne pour initialiser le nombre de ligne et colonne.
+		//cout << numCols << " " << numRows << " " << endl; // Log de creation
+
+		// Formule pour l'heuristique
+		int Xstop = (cell_stop-1)/ numCols;
+		int Ystop = (cell_stop-1) % numRows;
+
 		getline(fichier, ligne);
 		int number = 1;
-		
 		for (int i = 0; i < numCols; i++)
 		{
-			getline(fichier, ligne);
-			std::istringstream iss(ligne);
+			getline(fichier, ligne);		//Lecture du fichier ligne par ligne
+			std::istringstream iss(ligne);	
 			for (int n = 0; n<numRows; n++)
 			{
 				int val;
 				iss >> val;
-				Cell * cellule = new Cell(val, number++);
-				grille.push_back(cellule);
-				//cout << val << endl;
+				
+				int heuristic =  abs(Xstop-i)%(numCols) + abs(Ystop-n)%(numRows); // Formule pour l'heuristique (le nombre de case séparant de la sortie indépendament du mur
+				//cout << i << " " << n << " " << heuristic << endl; //Affiche l'heuristique pour chaque case.
+				Cell * cellule = new Cell(val, number++, heuristic);	// Creation des cellules avec leurs valeurs, attribution d'un nombre pour chacun d'entre eux.
+				grille.push_back(cellule);					// Ajout des cellules dans la liste.
+				//cout << val << endl; //Log de creation
 			}
-			//cout << endl;
+			//cout << endl; //Log de creation
 		}
 	}
 	else
 		cerr << "Impossible d'ouvrir le fichier !" << endl;
-	start = grille.at(starting_cell);
-	//Mettre un while et boucler sur le voisin sinon c'est pas un growing tree !
+
+	start = grille.at(cell_start - 1);	// Initialisation du depart du labyrinthe
+	stop = grille.at(cell_stop - 1);		// Initialisation de l'arrivee du labyrinthe
+
 	for (int i = 0; i < numCols*numRows; i++) {
-		constructFromCode(grille.at(i), i);
+		constructFromCode(grille.at(i), i); // Creation des voisins en fonction du code
 	}
 		
 }
 
+//BFS du cours mais ajout de la fonction stopping pour arreter l'exploration si on atteint l'arrivee
 void Maze::solveMazeBFS() {
 	start->visit(path);
-	while ((!finished) && (!path.empty())) {
-		Cell * current = path.front();
+	Cell * current;
+	while ((!path.empty() && !finished))
+	{
+		current = path.front();
 		path.pop_front();
 		finished = current->visit(path);
-	}
+		if (stopping(current)) {
+			break;
+		}
+	} 
+	
 	if (!finished)
-		cout << "no solution found\n";
+		cout << "Not all the cell of the maze have been explored";
 }
 
-void Maze::print()
-{
+void Maze::solveMazeAStar() {
+	start->visit(path);
+	Cell * current;
+	int actual_cost = 999; //Infini
+	int need_to_visit = -1;
+	bool justdoit = false;
+	while ((!path.empty() && !finished))
+	{
+		for (int i = 0; i < path.size(); i++) {
+			current = path.front();
+			if (current->heuristic + path.size() <= actual_cost) {
+				actual_cost = current->heuristic + path.size();
+				need_to_visit = i;
+				cout << need_to_visit;
+				justdoit = true;
+			}
+		}
+		if (justdoit == true) {
+			current = path.at(need_to_visit);
+			cout << current->heuristic;
+			current->cost = current->heuristic + path.size();
+			justdoit == false;
+		
+			path.pop_front();
+			finished = current->visit(path);
+		}
+		
+
+		//if (stopping(current)) {
+		//	break;
+		//}
+	}
+
+	if (!finished)
+		cout << "Not all the cell of the maze have been explored";
 }
 
-int Maze::getCode(int r, int c)
-{
-	return 0;
-}
 
 void Maze::constructFromCode(Cell * cellule, int i) {
 	

@@ -9,16 +9,16 @@ using namespace std;
 
 class Maze {
 public:
-	Maze(const char * nameOfFile, int starting_cell);
+	Maze(const char * nameOfFile, int starting_cell, int cell_stop);
 	void solveMazeBFS();
-	void print();
-	int getCode(int r, int c);
+	void solveMazeAStar();
 protected:
 	int numRows;
 	int numCols;
-	vector<int> codes;
 	Cell * start;
+	Cell * stop;
 	bool finished;
+	bool stopping(Cell * current) { return (current->number == stop->number) ? true : false;}
 	void constructFromCode(Cell * cellule, int i);
 	deque <Cell *> grille;
 	deque <Cell *> path;// double-ended queue = Stack + queue
