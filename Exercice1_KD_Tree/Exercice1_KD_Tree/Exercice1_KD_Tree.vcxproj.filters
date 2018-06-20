@@ -23,9 +23,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Exercice1_KD_Tree.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
