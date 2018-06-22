@@ -24,12 +24,9 @@ public:
 	Site *getSiteById(long id);
 
 	void addSite(Site a);
-	void addOutDegree(Site a, Site b);
+	void addOutDegree(Site* a, Site* b);
 	void removeSite(Site a);
 	void removeOutDegree(Site a, Site b);
-
-	Site* findMinInDegreeList();
-
 
 	void triTopologique();
 	void pageRank(int iteration);

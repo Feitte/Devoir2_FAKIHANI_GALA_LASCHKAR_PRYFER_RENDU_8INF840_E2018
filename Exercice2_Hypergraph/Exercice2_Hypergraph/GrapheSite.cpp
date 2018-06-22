@@ -62,16 +62,17 @@ void GrapheSite::addSite(Site a)
 
 
 
-void GrapheSite::addOutDegree(Site a, Site b)
+void GrapheSite::addOutDegree(Site* a, Site* b)
 {
-	a.addOutDegree(b);
-	b.addInDegree(a);
-	if (!siteExiste(a)) {
-		addSite(a);
+	a->addOutDegree(*b);
+
+	b->addInDegree(*a);
+	if (!siteExiste(*a)) {
+		addSite(*a);
 	}
 		
-	if (!siteExiste(b)) {
-		addSite(b);
+	if (!siteExiste(*b)) {
+		addSite(*b);
 	}
 		
 }
@@ -119,7 +120,6 @@ void GrapheSite::removeOutDegree(Site a, Site b)
 	b.delInDegree(a);
 }
 
-
 void GrapheSite::triTopologique()
 {
 	long nbSommet = this->nbreSommet;
@@ -139,11 +139,11 @@ void GrapheSite::triTopologique()
 
 		//temp = *findMinInDegreeList();
 		int indegreeTemp = INT_MAX;
-		
-		
+
+
 		for (itr = listSite->begin(); itr != listSite->end(); advance(itr, 1)) {
 			if ((itr->getInDegreeNum()) < indegreeTemp) {
-				cout <<itr->getId()<<": " << itr->getInDegreeNum() <<endl;
+				
 				indegreeTemp = itr->getInDegreeNum();
 				temp = *itr;
 			}
@@ -156,13 +156,14 @@ void GrapheSite::triTopologique()
 		removeSite(temp);
 	}
 
-		
+
 	// Afficher
-	for (int i = 0; i<top_order.size(); i++)
+	for (int i = top_order.size()-1; i>=0; i--)
 		cout << top_order[i].getUrl() << endl;
 	cout << endl;
 
 }
+
 
 void GrapheSite::pageRank(int iteration) {
 
@@ -177,16 +178,16 @@ void GrapheSite::pageRank(int iteration) {
 	std::unordered_map<int, float> npg;
 
 	for (itr = listSite->begin(); itr != listSite->end(); advance(itr, 1)) {
-		opg.insert({ itr->getId(), ((double)1 / (double)nbreSommet) });
-		
+		opg.insert({ itr->getId(), ((float)1 / (float)nbreSommet) });
+
 	}
 
 	while (iteration > 0) {
 		dp = 0;
 
-		for (itr = listSite->begin(); itr != listSite->end(); advance(itr,1)) {
+		for (itr = listSite->begin(); itr != listSite->end(); advance(itr, 1)) {
 			if (itr->getInDegreeNum() > 0) {
-				dp += d * ((float)opg[itr->getId()]/(float)nbreSommet);
+				dp += d * ((float)opg[itr->getId()] / (float)nbreSommet);
 			}
 		}
 
@@ -207,10 +208,10 @@ void GrapheSite::pageRank(int iteration) {
 		cout << itrAffi->first << " : " << itrAffi->second << endl;
 		advance(itrAffi, 1);
 	}
-		
-		
 
-	
+
+
+
 
 
 }
