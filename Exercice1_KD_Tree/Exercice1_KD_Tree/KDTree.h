@@ -37,6 +37,8 @@ public:
 private:
 	class KDNode
 	{
+		friend class KDTree;
+
 	public:
 		KDNode(Point const& p);
 		KDNode * insert(Point const& p, Axis const& axis);
