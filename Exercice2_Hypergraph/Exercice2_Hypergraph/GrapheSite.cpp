@@ -202,11 +202,15 @@ void GrapheSite::pageRank(int iteration) {
 	}
 
 	//affichage
-	/*std::unordered_map<int, float>::iterator itrAffi;
-	for (itrAffi = opg.begin(); itrAffi != opg.end(); advance(opg, 1)) {
-		cout << itrAffi->first << " : " << itrAffi->second;
+	std::unordered_map<int, float>::iterator itrAffi = opg.begin();
+	for (int i = 0; i < opg.size(); i++) {
+		cout << itrAffi->first << " : " << itrAffi->second << endl;
+		advance(itrAffi, 1);
+	}
+		
+		
 
-	}*/
+	
 
 
 }
