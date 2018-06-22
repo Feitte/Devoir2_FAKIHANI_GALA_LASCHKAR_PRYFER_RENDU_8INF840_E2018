@@ -14,7 +14,7 @@ Maze::Maze(const char * nameOfFile, int cell_start, int cell_stop)
 		// Formule pour l'heuristique
 		int Xstop = (cell_stop-1)/ numCols;
 		int Ystop = (cell_stop-1) % numRows;
-
+		
 		getline(fichier, ligne);
 		int number = 1;
 		for (int i = 0; i < numCols; i++)
@@ -25,10 +25,10 @@ Maze::Maze(const char * nameOfFile, int cell_start, int cell_stop)
 			{
 				int val;
 				iss >> val;
-				
+				bool setStop = (Xstop==i && Ystop==n) ? true : false;
 				int heuristic =  abs(Xstop-i)%(numCols) + abs(Ystop-n)%(numRows); // Formule pour l'heuristique (le nombre de case séparant de la sortie indépendament du mur
 				//cout << i << " " << n << " " << heuristic << endl; //Affiche l'heuristique pour chaque case.
-				Cell * cellule = new Cell(val, number++, heuristic);	// Creation des cellules avec leurs valeurs, attribution d'un nombre pour chacun d'entre eux.
+				Cell * cellule = new Cell(val, number++, heuristic, setStop);	// Creation des cellules avec leurs valeurs, attribution d'un nombre pour chacun d'entre eux.
 				grille.push_back(cellule);					// Ajout des cellules dans la liste.
 				//cout << val << endl; //Log de creation
 			}
@@ -66,38 +66,27 @@ void Maze::solveMazeBFS() {
 }
 
 void Maze::solveMazeAStar() {
-	start->visit(path);
+	start->visitAStar(path);
 	Cell * current;
-	int actual_cost = 999; //Infini
+	int current_check_cost = 9999999; //infinite
 	int need_to_visit = -1;
-	bool justdoit = false;
+	
+
 	while ((!path.empty() && !finished))
 	{
 		for (int i = 0; i < path.size(); i++) {
 			current = path.front();
-			if (current->heuristic + path.size() <= actual_cost) {
-				actual_cost = current->heuristic + path.size();
+			if (current->actual_cost <= current_check_cost) {
+				current_check_cost = current->actual_cost;
 				need_to_visit = i;
-				cout << need_to_visit;
-				justdoit = true;
 			}
 		}
-		if (justdoit == true) {
-			current = path.at(need_to_visit);
-			cout << current->heuristic;
-			current->cost = current->heuristic + path.size();
-			justdoit == false;
-		
-			path.pop_front();
-			finished = current->visit(path);
-		}
-		
+	
+		current = path.at(need_to_visit);
+		path.pop_back();
+		finished = current->visitAStar(path);
 
-		//if (stopping(current)) {
-		//	break;
-		//}
 	}
-
 	if (!finished)
 		cout << "Not all the cell of the maze have been explored";
 }
