@@ -28,6 +28,9 @@ public:
 	void removeSite(Site a);
 	void removeOutDegree(Site a, Site b);
 
+	Site* findMinInDegreeList();
+
+
 	void triTopologique();
 	void pageRank(int iteration);
 };

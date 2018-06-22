@@ -119,6 +119,7 @@ void GrapheSite::removeOutDegree(Site a, Site b)
 	b.delInDegree(a);
 }
 
+
 void GrapheSite::triTopologique()
 {
 	long nbSommet = this->nbreSommet;
@@ -128,92 +129,85 @@ void GrapheSite::triTopologique()
 	list<Site>::iterator itrSite;
 	list<Site>::iterator itrAdj;
 
-	// Parcourir les listes adjacentes pour mettre à jour les npmbres de liaisons
-	for (itrSite = listSite->begin(); itrSite != listSite->end(); advance(itrSite,1))
-	{
-		
-		/*for (itr = itrSite->inDegree->begin(); itr != adj[u].end(); itr++)
-			in_degree[itr->getId()]++;*/
-	}
-
 	// Créér une liste de tous les sommets qui n'ont aucun lien
 	int nbLien = 0;
 	vector <Site> top_order;
 
-	while ( top_order.size() < nbreSommet) {
+	Site temp;
+	list<Site>::iterator itr;
+	while (top_order.size() < nbreSommet) {
 
-		queue<Site> q;
-		for (int i = 0; i < nbSommet; i++)
-			if (in_degree[i] == nbLien)
-				q.push(*getSiteById(i));
-
-		// Initialiser un compteur pour les éléments parcourus précédemment
-		int cnt = 0;
-
-		// Créér un vecteur pour enregistrer le résultat
-
-		// Parcouris un a un les éléments
-		while (!q.empty())
-		{
-			// Retirer le premier element de la liste 
-			Site u = q.front();
-			q.pop();
-			top_order.push_back(u);
-
-			// Itérer tous les noeuds voisins de l'élément rétirer et supprimer les liaisons de -1
-			list<Site>::iterator itr;
-			for (itr = adj[u.getId()].begin(); itr != adj[u.getId()].end(); itr++)
-
-				// If in-degree becomes zero, add it to queue
-				if (--in_degree[itr->getId()] == nbLien)
-					q.push(*itr);
-
-			cnt++;
+		//temp = *findMinInDegreeList();
+		int indegreeTemp = INT_MAX;
+		
+		
+		for (itr = listSite->begin(); itr != listSite->end(); advance(itr, 1)) {
+			if ((itr->getInDegreeNum()) < indegreeTemp) {
+				cout <<itr->getId()<<": " << itr->getInDegreeNum() <<endl;
+				indegreeTemp = itr->getInDegreeNum();
+				temp = *itr;
+			}
+			if (indegreeTemp == 0) {
+				break;
+			}
 		}
+		top_order.push_back(temp);
+		cout << endl;
+		removeSite(temp);
+	}
 
 		
-		nbLien++;
-
-	}
-	
-
-	
-
 	// Afficher
 	for (int i = 0; i<top_order.size(); i++)
-		cout << top_order[i].getUrl() << " \n";
+		cout << top_order[i].getUrl() << endl;
 	cout << endl;
 
 }
 
 void GrapheSite::pageRank(int iteration) {
 
-	double d = 0.85;
-	double diff = 0.001;
-	double dp = 0;
+	float d = 0.85;
+	float diff = 0.001;
+	float dp = 0;
 
 	int i, j, k;
 	list<Site>::iterator itr;
-
+	list<Site>::iterator itrInlink;
 	std::unordered_map<int, float> opg;
 	std::unordered_map<int, float> npg;
 
 	for (itr = listSite->begin(); itr != listSite->end(); advance(itr, 1)) {
-		opg.insert({ itr->getId(), ((float)1 / (float)nbreSommet) });
-		cout << opg[itr->getId()] << endl;
+		opg.insert({ itr->getId(), ((double)1 / (double)nbreSommet) });
+		
 	}
 
 	while (iteration > 0) {
 		dp = 0;
+
 		for (itr = listSite->begin(); itr != listSite->end(); advance(itr,1)) {
 			if (itr->getInDegreeNum() > 0) {
-				dp += d * ((double)opg[itr->getId()]/(double)nbreSommet);
+				dp += d * ((float)opg[itr->getId()]/(float)nbreSommet);
 			}
 		}
 
+		for (itr = listSite->begin(); itr != listSite->end(); advance(itr, 1)) {
+			npg.insert({ itr->getId(),dp + (float)(1 - d) / (float)nbreSommet });
+			for (itrInlink = itr->inDegree->begin(); itrInlink != itr->inDegree->end(); advance(itrInlink, 1)) {
+				npg[itr->getId()] += ((float)d * (float)opg[itrInlink->getId()] / (float)itrInlink->getOutDegreeNum());
+			}
+		}
 
+		opg = npg;
 		iteration--;
 	}
+
+	//affichage
+	/*std::unordered_map<int, float>::iterator itrAffi;
+	for (itrAffi = opg.begin(); itrAffi != opg.end(); advance(opg, 1)) {
+		cout << itrAffi->first << " : " << itrAffi->second;
+
+	}*/
+
 
 }
 
