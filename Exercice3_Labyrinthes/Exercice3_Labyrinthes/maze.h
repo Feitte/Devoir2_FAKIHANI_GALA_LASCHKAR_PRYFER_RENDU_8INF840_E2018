@@ -20,6 +20,7 @@ protected:
 	bool finished;
 	bool stopping(Cell * current) { return (current->number == stop->number) ? true : false;}
 	void constructFromCode(Cell * cellule, int i);
+	int pathCost = 0;
 	deque <Cell *> grille;
 	deque <Cell *> path;// double-ended queue = Stack + queue
 };
