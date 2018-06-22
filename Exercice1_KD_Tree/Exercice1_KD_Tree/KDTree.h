@@ -38,8 +38,8 @@ private:
 	public:
 		KDNode(Point const& p);
 		KDNode * insert(Point const& p, Axis const& axis);
-		KDNode * remove(Point const& p);
-		bool exists(Point const& p) const;
+		KDNode * remove(Point const& p, Axis const& axis);
+		bool exists(Point const& p, Axis const& axis) const;
 
 		friend std::ostream& operator<<(std::ostream& os, KDNode const& node);
 		void displayInfix(std::ostream& os, int i = 1) const;

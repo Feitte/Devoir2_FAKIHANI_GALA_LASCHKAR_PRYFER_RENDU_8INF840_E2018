@@ -16,13 +16,13 @@ KDTree * KDTree::insert(Point const & p)
 KDTree * KDTree::remove(Point const & p)
 {
 	if (!isEmpty())
-		root->remove(p);
+		root->remove(p, Axis::X);
 	return this;
 }
 
 bool KDTree::exists(Point const & p) const
 {
-	return isEmpty() ? false : root->exists(p);
+	return isEmpty() ? false : root->exists(p, Axis::X);
 }
 
 bool KDTree::isEmpty() const
@@ -72,14 +72,33 @@ KDTree::KDNode * KDTree::KDNode::insert(Point const & p, Axis const & axis)
 	return this;
 }
 
-KDTree::KDNode * KDTree::KDNode::remove(Point const & p)
+KDTree::KDNode * KDTree::KDNode::remove(Point const & p, Axis const& axis)
 {
 	return nullptr;
 }
 
-bool KDTree::KDNode::exists(Point const& p) const
+bool KDTree::KDNode::exists(Point const& p, Axis const& axis) const
 {
-	return false;
+	if (p == this->p)
+		return true;
+
+	else if (axis == Axis::X)
+	{
+		if (p.x >= this->p.x && right != nullptr)
+			return right->exists(p, Axis::Y);
+
+		else if (p.x < this->p.x && left != nullptr)
+			return left->exists(p, Axis::Y);
+	}
+
+	else if (axis == Axis::Y)
+	{
+		if (p.y >= this->p.y && right != nullptr)
+			return right->exists(p, Axis::X);
+
+		else if (p.y < this->p.y && left != nullptr)
+			return left->exists(p, Axis::X);
+	}
 }
 
 /////////////////////////////////////////////
