@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 struct Point
 {
@@ -18,6 +19,7 @@ struct Point
 	int y;
 };
 
+float distance(Point const& a, Point const& b);
 std::ostream& operator<<(std::ostream& os, Point const& p);
 
 enum class Axis {X,Y};
@@ -40,11 +42,14 @@ private:
 		KDNode * insert(Point const& p, Axis const& axis);
 		KDNode * remove(Point const& p, Axis const& axis);
 		bool exists(Point const& p, Axis const& axis) const;
+		bool isLeaf() const;
 
 		friend std::ostream& operator<<(std::ostream& os, KDNode const& node);
 		void displayInfix(std::ostream& os, int i = 1) const;
 
 	private:
+
+		std::vector<Point> getChildrenPoints() const;
 
 		Point p;
 		std::unique_ptr<KDNode> left;

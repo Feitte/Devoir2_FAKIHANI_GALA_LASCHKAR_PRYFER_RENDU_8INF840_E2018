@@ -1,4 +1,5 @@
 #include "KDTree.h"
+#include <cmath>
 
 /////////////////////////////////////////////
 //////           KD-TREE                /////
@@ -74,14 +75,90 @@ KDTree::KDNode * KDTree::KDNode::insert(Point const & p, Axis const & axis)
 
 KDTree::KDNode * KDTree::KDNode::remove(Point const & p, Axis const& axis)
 {
-	return nullptr;
+	if (axis == Axis::X)
+	{
+		if (p.x >= this->p.x && right != nullptr)
+		{
+			if (p == right->p)
+			{
+				if (right->isLeaf())
+					right = nullptr;
+				else
+				{
+					std::vector<Point> pointsToReinsert = right->getChildrenPoints();
+					right = nullptr;
+					for (auto& point : pointsToReinsert)
+						insert(point, axis);
+				}
+			}
+			else
+				right->remove(p, Axis::Y);
+		}
+		else if (p.x < this->p.x && left != nullptr)
+		{
+			if (p == left->p)
+			{
+				if (left->isLeaf())
+					left = nullptr;
+				else
+				{
+					std::vector<Point> pointsToReinsert = left->getChildrenPoints();
+					left = nullptr;
+					for (auto& point : pointsToReinsert)
+						insert(point, axis);
+				}
+			}
+			else
+				left->remove(p, Axis::Y);
+		}
+	}
+	else if (axis == Axis::Y)
+	{
+		if (p.y >= this->p.y && right != nullptr)
+		{
+			if (p == right->p)
+			{
+				if (right->isLeaf())
+					right = nullptr;
+				else
+				{
+					std::vector<Point> pointsToReinsert = right->getChildrenPoints();
+					right = nullptr;
+					for (auto& point : pointsToReinsert)
+						insert(point, axis);
+				}
+			}
+			else
+				right->remove(p, Axis::X);
+		}
+		else if (p.x < this->p.x && left != nullptr)
+		{
+			if (p == left->p)
+			{
+				if (left->isLeaf())
+					left = nullptr;
+				else
+				{
+					std::vector<Point> pointsToReinsert = left->getChildrenPoints();
+					left = nullptr;
+					for (auto& point : pointsToReinsert)
+						insert(point, axis);
+				}
+			}
+			else
+				left->remove(p, Axis::X);
+		}
+	}
+
+	return this;
 }
 
 bool KDTree::KDNode::exists(Point const& p, Axis const& axis) const
 {
 	if (p == this->p)
 		return true;
-
+	else if (isLeaf())
+		return false;
 	else if (axis == Axis::X)
 	{
 		if (p.x >= this->p.x && right != nullptr)
@@ -99,6 +176,26 @@ bool KDTree::KDNode::exists(Point const& p, Axis const& axis) const
 		else if (p.y < this->p.y && left != nullptr)
 			return left->exists(p, Axis::X);
 	}
+}
+
+bool KDTree::KDNode::isLeaf() const
+{
+	return right == nullptr && left == nullptr;
+}
+
+std::vector<Point> KDTree::KDNode::getChildrenPoints() const
+{
+	return std::vector<Point>();
+}
+
+/////////////////////////////////////////////
+//////           Point                  /////
+/////////////////////////////////////////////
+
+float distance(Point const& a, Point const& b)
+{
+	int dx = a.x - b.x, dy = a.y - b.y;
+	return sqrt(dx * dx + dy * dy);
 }
 
 /////////////////////////////////////////////
@@ -126,6 +223,7 @@ std::ostream& operator<<(std::ostream& os, KDTree const& tree)
 	{
 		os << "Starting infix KD-Tree display :" << std::endl;
 		tree.root->displayInfix(os);
+		os << "End of KD-Tree";
 	}
 	return os;
 }
