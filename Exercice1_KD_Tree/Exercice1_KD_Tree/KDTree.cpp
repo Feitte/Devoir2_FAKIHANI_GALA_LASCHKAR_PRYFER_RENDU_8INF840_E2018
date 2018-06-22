@@ -23,7 +23,7 @@ KDTree * KDTree::remove(Point const & p)
 			std::vector<Point> pointsToReinsert = root->getChildrenPoints();
 			root = nullptr;
 			for (auto& point : pointsToReinsert)
-				insert(point);
+				this->insert(point);
 		}
 		else
 			root->remove(p, Axis::X);
@@ -217,7 +217,25 @@ bool KDTree::KDNode::isLeaf() const
 
 std::vector<Point> KDTree::KDNode::getChildrenPoints() const
 {
-	return std::vector<Point>();
+	std::vector<Point> points = std::vector<Point>();
+	return _getChildrenPoints(points);
+}
+
+std::vector<Point> KDTree::KDNode::_getChildrenPoints(std::vector<Point>& points) const
+{
+	if (left != nullptr)
+	{
+		points.push_back(left->p);
+		left->_getChildrenPoints(points);
+	}
+
+	if (right != nullptr)
+	{
+		points.push_back(right->p);
+		right->_getChildrenPoints(points);
+	}
+
+	return points;
 }
 
 /////////////////////////////////////////////

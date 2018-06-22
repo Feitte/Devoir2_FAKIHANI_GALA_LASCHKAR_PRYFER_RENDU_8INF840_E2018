@@ -30,6 +30,7 @@ class KDTree
 public:
 	KDTree * insert(Point const& p);
 	KDTree * remove(Point const& p);
+
 	bool exists(Point const& p) const;
 	bool isEmpty() const;
 	
@@ -50,8 +51,8 @@ private:
 		void displayInfix(std::ostream& os, int i = 1) const;
 
 	private:
-
 		std::vector<Point> getChildrenPoints() const;
+		std::vector<Point> _getChildrenPoints(std::vector<Point>& points) const;
 
 		Point p;
 		std::unique_ptr<KDNode> left;
