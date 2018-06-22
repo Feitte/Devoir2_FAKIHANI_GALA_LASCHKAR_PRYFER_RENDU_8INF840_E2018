@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "GrapheSite.h"
-#include "Site.h";
-#include <queue>;
+#include "Site.h"
+#include <queue>
 #include <iostream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -25,13 +26,13 @@ Site* GrapheSite::getSiteById(long id)
 			return &(*it);
 		advance(it, 1);
 	}
-
+	
 	return new Site();
 }
 
-GrapheSite::GrapheSite(long nbreSommet = 10)
+GrapheSite::GrapheSite()
 {
-	this->nbreSommet = nbreSommet;
+	nbreSommet =0;
 	adj = new list<Site>[nbreSommet];
 	listSite = new list<Site>();
 	
@@ -43,13 +44,79 @@ GrapheSite::~GrapheSite()
 {
 }
 
+GrapheSite* GrapheSite::clone()
+{
+	return new GrapheSite(*this);
+}
+
+long GrapheSite::getNbreSommet()
+{
+	return nbreSommet;
+}
+
+void GrapheSite::addSite(Site a)
+{
+	listSite->push_back(a);
+	nbreSommet++; 
+}
+
+
+
 void GrapheSite::addOutDegree(Site a, Site b)
 {
-	adj[a.getId()].push_back(b);
-	if (!siteExiste(a))
-		listSite->push_back(a);
-	if (!siteExiste(b))
-		listSite->push_back(b);
+	a.addOutDegree(b);
+	b.addInDegree(a);
+	if (!siteExiste(a)) {
+		addSite(a);
+	}
+		
+	if (!siteExiste(b)) {
+		addSite(b);
+	}
+		
+}
+
+void GrapheSite::removeSite(Site a)
+{
+
+
+	if (siteExiste(a)) {
+
+		list<Site>::iterator itr;
+
+		int i;
+		itr = a.outDegree->begin();
+		for (i = 0; i < a.getOutDegreeNum(); i++) {
+			Site b = *itr;
+			++itr;
+			removeOutDegree(a, b);
+			
+		}
+
+		itr = a.inDegree->begin();
+		for (i = 0; i < a.getInDegreeNum(); i++) {
+			Site b = *itr;
+			++itr;
+			removeOutDegree(b, a);
+
+		}
+		for (itr = listSite->begin(); itr != listSite->end(); advance(itr, 1)) {
+			if (itr->getId() == a.getId()) {
+				listSite->remove(*itr);
+				break;
+			}
+		}
+	}
+	
+
+
+
+}
+
+void GrapheSite::removeOutDegree(Site a, Site b)
+{
+	a.delOutDegree(b);
+	b.delInDegree(a);
 }
 
 void GrapheSite::triTopologique()
@@ -58,13 +125,15 @@ void GrapheSite::triTopologique()
 	// Creation d'un vecteur pour enregistrer les liaisons
 	// A l'initialisation, mettre les liaisons à 0
 	vector<long> in_degree(nbSommet, 0);
+	list<Site>::iterator itrSite;
+	list<Site>::iterator itrAdj;
 
 	// Parcourir les listes adjacentes pour mettre à jour les npmbres de liaisons
-	for (int u = 0; u<nbSommet; u++)
+	for (itrSite = listSite->begin(); itrSite != listSite->end(); advance(itrSite,1))
 	{
-		list<Site>::iterator itr;
-		for (itr = adj[u].begin(); itr != adj[u].end(); itr++)
-			in_degree[itr->getId()]++;
+		
+		/*for (itr = itrSite->inDegree->begin(); itr != adj[u].end(); itr++)
+			in_degree[itr->getId()]++;*/
 	}
 
 	// Créér une liste de tous les sommets qui n'ont aucun lien
@@ -116,3 +185,40 @@ void GrapheSite::triTopologique()
 	cout << endl;
 
 }
+
+void GrapheSite::pageRank(int iteration) {
+
+	double d = 0.85;
+	double diff = 0.001;
+	double dp = 0;
+
+	int i, j, k;
+	list<Site>::iterator itr;
+
+	std::unordered_map<int, float> opg;
+	std::unordered_map<int, float> npg;
+
+	for (itr = listSite->begin(); itr != listSite->end(); advance(itr, 1)) {
+		opg.insert({ itr->getId(), ((float)1 / (float)nbreSommet) });
+		cout << opg[itr->getId()] << endl;
+	}
+
+	while (iteration > 0) {
+		dp = 0;
+		for (itr = listSite->begin(); itr != listSite->end(); advance(itr,1)) {
+			if (itr->getInDegreeNum() > 0) {
+				dp += d * ((double)opg[itr->getId()]/(double)nbreSommet);
+			}
+		}
+
+
+		iteration--;
+	}
+
+}
+
+
+
+
+
+
