@@ -147,11 +147,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="KDTree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exercice1_KD_Tree.cpp" />
+    <ClCompile Include="KDTree.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
